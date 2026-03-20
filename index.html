@@ -3,91 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Hotel Boutique - Bãi Trường, Phú Quốc</title>
+    <title>Hotel Boutique - Bãi Trường, Phú Quốc</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Lexend', sans-serif; scroll-behavior: smooth; }
-        .hero-gradient { background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; }
+        body {
+            font-family: 'Lexend', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
         .bg-green-primary { background-color: #10b981; }
         .text-green-primary { color: #059669; }
         .room-card:hover img { transform: scale(1.05); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-green-primary rounded-lg flex items-center justify-center text-white"><i class="fas fa-leaf"></i></div>
-                <span class="text-2xl font-bold text-emerald-900 uppercase">Emerald <span class="text-green-primary">Coast</span></span>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-green-primary rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-hotel text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold tracking-tight text-emerald-900 uppercase">Hotel <span class="text-green-primary">Boutique</span></span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8 font-medium">
+                    <a href="#home" class="text-emerald-900 hover:text-green-primary transition-colors">Trang chủ</a>
+                    <a href="#rooms" class="text-emerald-900 hover:text-green-primary transition-colors">Phòng nghỉ</a>
+                    <a href="#services" class="text-emerald-900 hover:text-green-primary transition-colors">Dịch vụ</a>
+                    <a href="#contact" class="text-emerald-900 hover:text-green-primary transition-colors">Liên hệ</a>
+                </div>
+
+                <div class="hidden md:block">
+                    <a href="tel:0933484668" class="bg-green-primary hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-lg shadow-emerald-200">
+                        <i class="fas fa-phone-alt mr-2"></i> 0933.484.668
+                    </a>
+                </div>
             </div>
-            <div class="hidden md:flex space-x-8 font-medium">
-                <a href="#rooms" class="hover:text-green-primary">Phòng nghỉ</a>
-                <a href="#services" class="hover:text-green-primary">Dịch vụ</a>
-                <a href="#contact" class="hover:text-green-primary">Liên hệ</a>
-            </div>
-            <a href="tel:0933484668" class="bg-green-primary text-white px-6 py-2.5 rounded-full font-semibold">0933.484.668</a>
         </div>
     </nav>
 
-    <section class="hero-gradient h-screen flex items-center px-4">
-        <div class="max-w-4xl mx-auto text-center text-white">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6">Nghỉ dưỡng xanh tại Bãi Trường</h1>
-            <p class="text-xl mb-8">Trải nghiệm sự tươi mát và chuyên hiệu quả tại Phú Quốc. Khách sạn 3 sao tiêu chuẩn quốc tế.</p>
-            <div class="flex justify-center gap-4">
-                <a href="#rooms" class="bg-white text-emerald-900 px-8 py-4 rounded-xl font-bold">Xem phòng</a>
-                <a href="#booking" class="bg-green-primary text-white px-8 py-4 rounded-xl font-bold">Đặt ngay</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="rooms" class="py-24 max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">Các hạng phòng nghỉ</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="h-64 w-full object-cover">
-                <div class="p-6">
-                    <h3 class="font-bold text-xl mb-2">Standard Garden</h3>
-                    <p class="text-slate-500 mb-4">Hướng vườn mát mẻ, yên tĩnh.</p>
-                    <div class="text-green-primary font-bold">1.200.000đ / đêm</div>
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient h-screen flex items-center relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-2xl text-white">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium mb-6">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <span>Trải nghiệm nghỉ dưỡng 3 sao đẳng cấp</span>
                 </div>
-            </div>
-            <div class="bg-white rounded-3xl overflow-hidden shadow-lg border-2 border-green-primary scale-105">
-                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="h-64 w-full object-cover">
-                <div class="p-6">
-                    <h3 class="font-bold text-xl mb-2">Deluxe Ocean View</h3>
-                    <p class="text-slate-500 mb-4">View biển trọn vẹn từ ban công.</p>
-                    <div class="text-green-primary font-bold">1.800.000đ / đêm</div>
-                </div>
-            </div>
-            <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="h-64 w-full object-cover">
-                <div class="p-6">
-                    <h3 class="font-bold text-xl mb-2">Family Suite</h3>
-                    <p class="text-slate-500 mb-4">Rộng rãi cho cả gia đình.</p>
-                    <div class="text-green-primary font-bold">2.500.000đ / đêm</div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    Nghỉ dưỡng xanh tại <br>
+                    <span class="text-green-400">Hotel Boutique</span>
+                </h1>
+                <p class="text-lg md:text-xl mb-8 text-slate-100 leading-relaxed">
+                    Tọa lạc tại trung tâm Bãi Trường, Phú Quốc. Chúng tôi mang đến không gian tươi mát, sang trọng và dịch vụ chuyên nghiệp nhất cho kỳ nghỉ của bạn.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#rooms" class="bg-white text-emerald-900 px-8 py-4 rounded-xl font-bold text-center hover:bg-emerald-50 transition-all">Xem các hạng phòng</a>
+                    <a href="#services" class="border-2 border-white/50 text-white px-8 py-4 rounded-xl font-bold text-center hover:bg-white/10 transition-all">Tiện ích khách sạn</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Booking Bar -->
+    <section id="booking" class="relative -mt-16 z-20 px-4">
+        <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-emerald-100">
+            <form class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-2">Ngày nhận phòng</label>
+                    <input type="date" class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-100 rounded-lg focus:ring-2 focus:ring-green-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-2">Ngày trả phòng</label>
+                    <input type="date" class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-100 rounded-lg focus:ring-2 focus:ring-green-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-emerald-900 uppercase mb-2">Số khách</label>
+                    <select class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-100 rounded-lg focus:ring-2 focus:ring-green-primary outline-none">
+                        <option>2 Người lớn</option>
+                        <option>Gia đình (2+2)</option>
+                        <option>1 Người lớn</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="button" class="w-full bg-green-primary hover:bg-emerald-600 text-white font-bold py-3 rounded-lg transition-all shadow-lg">
+                        KIỂM TRA PHÒNG
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section id="rooms" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-green-primary text-sm font-bold tracking-widest uppercase mb-2">Danh sách phòng</h2>
+                <h3 class="text-4xl font-bold text-slate-900">Không gian nghỉ ngơi lý tưởng</h3>
+                <div class="w-20 h-1 bg-green-primary mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Standard -->
+                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 transition-all hover:shadow-xl">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" alt="Standard" class="w-full h-full object-cover transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-emerald-900 mb-2">Standard Garden View</h4>
+                        <p class="text-slate-500 text-sm mb-4">Phòng tiêu chuẩn hướng vườn yên tĩnh, đầy đủ tiện nghi hiện đại.</p>
+                        <div class="flex justify-between items-center mt-6">
+                            <span class="text-green-primary font-bold text-lg">1.200.000đ</span>
+                            <button class="px-4 py-2 border-2 border-green-primary text-green-primary rounded-lg font-bold hover:bg-green-primary hover:text-white transition-all text-sm">CHI TIẾT</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deluxe -->
+                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-lg border-2 border-green-primary/30 scale-105 z-10 transition-all hover:shadow-2xl">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" alt="Deluxe" class="w-full h-full object-cover transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-green-primary text-white px-3 py-1 rounded-full text-xs font-bold uppercase">Phổ biến</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-emerald-900 mb-2">Deluxe Ocean View</h4>
+                        <p class="text-slate-500 text-sm mb-4">Thức dậy với tầm nhìn panorama hướng thẳng ra biển Bãi Trường rực rỡ.</p>
+                        <div class="flex justify-between items-center mt-6">
+                            <span class="text-green-primary font-bold text-lg">1.800.000đ</span>
+                            <button class="px-4 py-2 bg-green-primary text-white rounded-lg font-bold hover:bg-emerald-600 transition-all text-sm">ĐẶT NGAY</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suite -->
+                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 transition-all hover:shadow-xl">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" alt="Suite" class="w-full h-full object-cover transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-emerald-900 mb-2">Boutique Family Suite</h4>
+                        <p class="text-slate-500 text-sm mb-4">Không gian rộng rãi 50m2 với khu vực tiếp khách riêng, lý tưởng cho gia đình.</p>
+                        <div class="flex justify-between items-center mt-6">
+                            <span class="text-green-primary font-bold text-lg">2.500.000đ</span>
+                            <button class="px-4 py-2 border-2 border-green-primary text-green-primary rounded-lg font-bold hover:bg-green-primary hover:text-white transition-all text-sm">CHI TIẾT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
     <section id="services" class="py-24 bg-emerald-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
-                <h2 class="text-4xl font-bold mb-6">Tiện ích đẳng cấp</h2>
-                <div class="space-y-6">
-                    <div class="flex gap-4"><i class="fas fa-swimmer text-2xl text-green-400"></i><div><h5 class="font-bold">Hồ bơi vô cực</h5><p class="text-emerald-200">Mở cửa từ 6:00 - 22:00 hàng ngày.</p></div></div>
-                    <div class="flex gap-4"><i class="fas fa-utensils text-2xl text-green-400"></i><div><h5 class="font-bold">Nhà hàng Lá Xanh</h5><p class="text-emerald-200">Ẩm thực hải sản tươi sống đặc sắc.</p></div></div>
-                    <div class="flex gap-4"><i class="fas fa-shuttle-van text-2xl text-green-400"></i><div><h5 class="font-bold">Đưa đón sân bay</h5><p class="text-emerald-200">Miễn phí cho khách đặt trên 2 đêm.</p></div></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-green-400 text-sm font-bold tracking-widest uppercase mb-3">Dịch vụ tại Hotel Boutique</h2>
+                    <h3 class="text-4xl font-bold mb-6">Trải nghiệm tiện ích xanh & hiện đại</h3>
+                    <p class="text-emerald-100 mb-10 leading-relaxed">
+                        Chúng tôi chú trọng vào sự thoải mái và trải nghiệm cá nhân hóa của mỗi khách hàng khi lưu trú tại đảo Ngọc.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-green-400">
+                                <i class="fas fa-swimmer text-xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold">Hồ bơi vô cực</h5>
+                                <p class="text-sm text-emerald-200">Thư giãn với view biển</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-green-400">
+                                <i class="fas fa-utensils text-xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold">Nhà hàng Lá Xanh</h5>
+                                <p class="text-sm text-emerald-200">Hải sản tươi sống</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-green-400">
+                                <i class="fas fa-spa text-xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold">Spa & Massage</h5>
+                                <p class="text-sm text-emerald-200">Liệu trình thiên nhiên</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-green-400">
+                                <i class="fas fa-shuttle-van text-xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold">Đưa đón sân bay</h5>
+                                <p class="text-sm text-emerald-200">Hoàn toàn miễn phí</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" class="rounded-[3rem] w-full h-[500px] object-cover shadow-2xl" alt="Boutique Pool">
+                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl text-emerald-900 shadow-xl hidden md:block">
+                        <div class="text-3xl font-bold">100%</div>
+                        <div class="text-sm font-medium">Khách hàng hài lòng</div>
+                    </div>
                 </div>
             </div>
-            <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800" class="rounded-3xl shadow-2xl">
         </div>
     </section>
 
-    <footer id="contact" class="py-12 bg-slate-900 text-slate-400 text-center">
-        <p>&copy; 2026 Hotel Boutique Phu Quoc. Designed for Tra My .</p>
+    <!-- Footer -->
+    <footer id="contact" class="bg-slate-900 text-slate-400 py-20 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+            <div>
+                <div class="flex items-center justify-center md:justify-start gap-2 mb-6">
+                    <div class="w-8 h-8 bg-green-primary rounded flex items-center justify-center text-white"><i class="fas fa-hotel"></i></div>
+                    <span class="text-xl font-bold text-white uppercase">Hotel <span class="text-green-primary">Boutique</span></span>
+                </div>
+                <p class="text-sm leading-relaxed">
+                    Khách sạn nghỉ dưỡng tiêu chuẩn 3 sao tại Bãi Trường, Phú Quốc. Nơi mang lại kỳ nghỉ xanh mát và trọn vẹn.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Liên hệ với chúng tôi</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><i class="fas fa-map-marker-alt mr-2 text-green-primary"></i> Bãi Trường, Dương Tơ, Phú Quốc</li>
+                    <li><i class="fas fa-phone-alt mr-2 text-green-primary"></i> 0933.484.668</li>
+                    <li><i class="fas fa-envelope mr-2 text-green-primary"></i> info@hotelboutique.vn</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Kết nối</h4>
+                <div class="flex justify-center md:justify-start gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-green-primary hover:text-white transition-all"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-green-primary hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto border-t border-slate-800 mt-16 pt-8 text-center text-xs">
+            <p>&copy; 2026 Hotel Boutique Phu Quoc. Designed for My - FPT University.</p>
+        </div>
     </footer>
+
 </body>
 </html>
