@@ -60,18 +60,20 @@
         .lang-btn.lang-active { background-color: #10b981; color: white; }
         
         /* Article Styles */
-        .article-body h4 { font-weight: 700; color: #065f46; margin-top: 2rem; margin-bottom: 0.5rem; font-size: 1.35rem; }
-        .address-tag { display: inline-flex; align-items: center; background: #ecfdf5; color: #065f46; padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.25rem; border: 1px solid #10b981; }
-        .article-body p { line-height: 1.8; color: #374151; margin-bottom: 1.25rem; font-size: 1.05rem; }
-        .article-body ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; color: #374151; }
-        .article-body li { margin-bottom: 0.5rem; }
+        .article-body h4 { font-weight: 700; color: #065f46; margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.5rem; border-left: 4px solid #10b981; padding-left: 1rem; }
+        .address-tag { display: inline-flex; align-items: center; background: #ecfdf5; color: #065f46; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; border: 1px solid #10b981; }
+        .time-tag { display: inline-flex; align-items: center; background: #fff7ed; color: #9a3412; padding: 6px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.25rem; border: 1px solid #fdba74; }
+        .article-body p { line-height: 1.9; color: #374151; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        .article-body ul { list-style-type: none; margin-bottom: 2rem; }
+        .article-body li { margin-bottom: 0.75rem; position: relative; padding-left: 1.5rem; }
+        .article-body li::before { content: '•'; color: #10b981; font-weight: bold; position: absolute; left: 0; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Loading & Modal -->
     <div id="loading-overlay"><div class="text-center"><div class="inline-block w-12 h-12 border-4 border-green-primary border-t-transparent rounded-full animate-spin mb-4"></div><p class="text-emerald-900 font-bold" data-i18n="processing">Đang xử lý...</p></div></div>
-    <div id="result-modal"><div class="bg-white rounded-[2.5rem] max-w-2xl w-full p-10 shadow-2xl relative"><button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors"><i class="fas fa-times text-2xl"></i></button><h3 class="text-2xl font-bold text-emerald-900 mb-6" id="modal-title" data-i18n="notification">Thông báo</h3><div id="modal-content" class="space-y-4 text-left"></div></div></div>
+    <div id="result-modal"><div class="bg-white rounded-[3rem] max-w-2xl w-full p-10 shadow-2xl relative"><button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors"><i class="fas fa-times text-2xl"></i></button><h3 class="text-2xl font-bold text-emerald-900 mb-6" id="modal-title" data-i18n="notification">Thông báo</h3><div id="modal-content" class="space-y-4 text-left"></div></div></div>
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-emerald-50">
@@ -89,6 +91,7 @@
             </div>
             
             <div class="flex items-center gap-2 md:gap-4">
+                <!-- Nút chuyển ngôn ngữ đặt cạnh SĐT -->
                 <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
                     <button onclick="changeLanguage('vi')" id="lang-vi-btn" class="lang-btn lang-active">VI</button>
                     <button onclick="changeLanguage('en')" id="lang-en-btn" class="lang-btn">EN</button>
@@ -122,6 +125,7 @@
             <div class="hero-overlay"></div>
 
             <div class="max-w-4xl mx-auto text-white relative z-10 pt-20">
+                <!-- Tag Nhấp nháy nổi bật -->
                 <div class="blink-element bg-green-primary/95 backdrop-blur-md px-10 py-4 rounded-full font-bold text-sm md:text-base uppercase tracking-[0.2em] mb-10 shadow-2xl border border-white/30">
                     <div class="flex gap-2 text-yellow-300 mr-4">
                         <i class="fas fa-star text-lg drop-shadow-[0_0_10px_rgba(253,224,71,0.8)]"></i>
@@ -143,7 +147,7 @@
         <!-- Booking Bar -->
         <section class="relative -mt-20 z-20 px-4">
             <div class="max-w-6xl mx-auto bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border border-emerald-100">
-                <form class="grid grid-cols-1 md:grid-cols-4 gap-8" id="check-form">
+                <form class="grid grid-cols-1 md:grid-cols-5 gap-6" id="check-form">
                     <div class="space-y-2">
                         <label class="block text-xs font-bold text-emerald-900 uppercase tracking-widest ml-1" data-i18n="label_checkin">Nhận phòng</label>
                         <input type="date" required class="w-full px-6 py-4 bg-emerald-50/50 rounded-2xl outline-none border border-emerald-100 focus:border-green-primary transition-all">
@@ -153,8 +157,12 @@
                         <input type="date" required class="w-full px-6 py-4 bg-emerald-50/50 rounded-2xl outline-none border border-emerald-100 focus:border-green-primary transition-all">
                     </div>
                     <div class="space-y-2">
-                        <label class="block text-xs font-bold text-emerald-900 uppercase tracking-widest ml-1" data-i18n="label_guests">Số khách</label>
-                        <select class="w-full px-6 py-4 bg-emerald-50/50 rounded-2xl outline-none border border-emerald-100 focus:border-green-primary appearance-none"><option data-i18n="opt_2adults">2 Người lớn</option><option data-i18n="opt_family">Gia đình</option></select>
+                        <label class="block text-xs font-bold text-emerald-900 uppercase tracking-widest ml-1" data-i18n="label_adults">Người lớn</label>
+                        <input type="number" min="1" max="10" value="2" class="w-full px-6 py-4 bg-emerald-50/50 rounded-2xl outline-none border border-emerald-100 focus:border-green-primary transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-emerald-900 uppercase tracking-widest ml-1" data-i18n="label_children">Trẻ em</label>
+                        <input type="number" min="0" max="10" value="0" class="w-full px-6 py-4 bg-emerald-50/50 rounded-2xl outline-none border border-emerald-100 focus:border-green-primary transition-all">
                     </div>
                     <div class="flex items-end"><button type="submit" class="w-full bg-emerald-900 text-white font-bold py-4 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-widest" data-i18n="btn_find">TÌM PHÒNG</button></div>
                 </form>
@@ -216,7 +224,16 @@
                             <input type="text" id="full-name" required data-placeholder="placeholder_name" class="w-full px-8 py-5 rounded-[2rem] outline-none shadow-sm border-none focus:ring-2 focus:ring-green-primary">
                             <input type="tel" id="phone-number" required data-placeholder="placeholder_phone" class="w-full px-8 py-5 rounded-[2rem] outline-none shadow-sm border-none focus:ring-2 focus:ring-green-primary">
                         </div>
-                        <input type="email" id="email-addr" data-placeholder="placeholder_email" class="w-full px-8 py-5 rounded-[2rem] outline-none shadow-sm border-none focus:ring-2 focus:ring-green-primary">
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-bold text-emerald-800 ml-2" data-i18n="label_adults">Người lớn</label>
+                                <input type="number" min="1" value="2" class="w-full px-8 py-5 rounded-[2rem] outline-none shadow-sm border-none focus:ring-2 focus:ring-green-primary">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-bold text-emerald-800 ml-2" data-i18n="label_children">Trẻ em</label>
+                                <input type="number" min="0" value="0" class="w-full px-8 py-5 rounded-[2rem] outline-none shadow-sm border-none focus:ring-2 focus:ring-green-primary">
+                            </div>
+                        </div>
                         <select id="selected-room-type" class="w-full px-8 py-5 rounded-[2rem] outline-none bg-white shadow-sm border-none appearance-none focus:ring-2 focus:ring-green-primary font-medium">
                             <option value="Deluxe Ocean View">Deluxe Ocean View</option>
                             <option value="Standard Garden View">Standard Garden View</option>
@@ -285,7 +302,7 @@
                 'nav_booking': 'Đặt phòng', 'nav_blog': 'Cẩm nang', 'hero_tag': 'Khách sạn nghỉ dưỡng tiêu chuẩn 3 sao',
                 'hero_title': 'Nghỉ dưỡng xanh tại Bãi Trường', 'hero_subtitle': 'Chạm tay vào biển biếc, tận hưởng không gian xanh mát và dịch vụ chuyên nghiệp tại Đảo Ngọc Phú Quốc.',
                 'cta_book': 'ĐẶT PHÒNG NGAY', 'cta_rooms': 'XEM PHÒNG', 'label_checkin': 'Nhận phòng', 'label_checkout': 'Trả phòng',
-                'label_guests': 'Số khách', 'opt_2adults': '2 Người lớn', 'opt_family': 'Gia đình', 'btn_find': 'TÌM PHÒNG',
+                'label_adults': 'Người lớn', 'label_children': 'Trẻ em', 'opt_2adults': '2 Người lớn', 'opt_family': 'Gia đình', 'btn_find': 'TÌM PHÒNG',
                 'rooms_title': 'Hạng phòng nghỉ dưỡng', 'rooms_subtitle': 'Thiết kế tinh tế kết hợp hài hòa giữa nội thất hiện đại và hơi thở thiên nhiên Đảo Ngọc.',
                 'room1_desc': 'Tận hưởng sự tĩnh lặng trong căn phòng hướng vườn xanh mát. Một không gian hoàn hảo cho những kỳ nghỉ dưỡng riêng tư.',
                 'room2_desc': 'Đón ánh bình minh rạng rỡ ngay tại giường. Tầm nhìn panorama hướng thẳng biển Bãi Trường sẽ làm say lòng bất kỳ du khách nào.',
@@ -297,14 +314,15 @@
                 'blog_title': 'Cẩm nang du lịch Phú Quốc', 'blog1_title': 'Top 5 địa điểm ngắm hoàng hôn rực rỡ nhất',
                 'blog2_title': 'Ăn gì ở Đảo Ngọc? Những món hải sản trứ danh', 'blog3_title': 'Mẹo đặt phòng mùa cao điểm có giá ưu đãi',
                 'btn_read': 'Đọc bài viết', 'btn_back': 'Quay lại trang chủ', 'footer_contact': 'Bãi Trường, Dương Tơ, Phú Quốc | Hotline: 0933.484.668',
-                'msg_success_title': 'Đã gửi yêu cầu!', 'msg_success_body': 'Chúng tôi sẽ gọi lại xác nhận trong 15 phút qua số 0933.484.668.', 'msg_understand': 'ĐÃ HIỂU', 'msg_rooms_found': 'Phòng còn trống'
+                'msg_success_title': 'Đã nhận yêu cầu!', 'msg_success_body': 'Thông tin của bạn đã được gửi đến lễ tân. Chúng tôi sẽ gọi lại xác nhận trong 15 phút.', 'msg_understand': 'TÔI ĐÃ HIỂU', 'msg_rooms_found': 'Phòng còn trống',
+                'label_open_hours': 'Giờ hoạt động:'
             },
             'en': {
                 'processing': 'Processing...', 'notification': 'Notification', 'nav_home': 'Home', 'nav_rooms': 'Accommodations',
                 'nav_booking': 'Booking', 'nav_blog': 'Guide', 'hero_tag': '3-Star Luxury Resort Standard',
                 'hero_title': 'Green Retreat at Long Beach', 'hero_subtitle': 'Touch the blue sea, enjoy fresh green space and professional service at Phu Quoc Pearl Island.',
                 'cta_book': 'BOOK NOW', 'cta_rooms': 'VIEW ROOMS', 'label_checkin': 'Check-in', 'label_checkout': 'Check-out',
-                'label_guests': 'Guests', 'opt_2adults': '2 Adults', 'opt_family': 'Family', 'btn_find': 'FIND ROOMS',
+                'label_adults': 'Adults', 'label_children': 'Children', 'opt_2adults': '2 Adults', 'opt_family': 'Family', 'btn_find': 'FIND ROOMS',
                 'rooms_title': 'Our Accommodations', 'rooms_subtitle': 'Exquisite design harmoniously combines modern furniture and the natural breath of Pearl Island.',
                 'room1_desc': 'Enjoy the absolute silence in the room facing the green garden. A perfect space for private vacations.',
                 'room2_desc': 'Welcome the radiant dawn right in bed. The panoramic view of Long Beach will fascinate any traveler.',
@@ -316,7 +334,8 @@
                 'blog_title': 'Phu Quoc Travel Guide', 'blog1_title': 'Top 5 Most Radiant Sunset Locations',
                 'blog2_title': 'What to Eat? Famous Seafood in Pearl Island', 'blog3_title': 'Booking Tips for Peak Season with Offers',
                 'btn_read': 'Read more', 'btn_back': 'Back to Home', 'footer_contact': 'Long Beach, Duong To, Phu Quoc | Hotline: 0933.484.668',
-                'msg_success_title': 'Request Sent!', 'msg_success_body': 'We will call you to confirm within 15 minutes at 0933.484.668.', 'msg_understand': 'I UNDERSTAND', 'msg_rooms_found': 'Available Rooms'
+                'msg_success_title': 'Request Received!', 'msg_success_body': 'Your info has been sent. We will call you to confirm within 15 minutes.', 'msg_understand': 'I UNDERSTAND', 'msg_rooms_found': 'Available Rooms',
+                'label_open_hours': 'Operating Hours:'
             }
         };
 
@@ -326,54 +345,54 @@
                     title: 'Top 5 địa điểm ngắm hoàng hôn rực rỡ nhất Bãi Trường', 
                     content: `
                         <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
-                        <p class="text-xl">Phú Quốc được mệnh danh là nơi ngắm hoàng hôn đẹp nhất Việt Nam. Bãi Trường chính là dải bờ biển vàng để tận hưởng khoảnh khắc này.</p>
+                        <p class="text-xl">Phú Quốc được mệnh danh là nơi ngắm hoàng hôn đẹp nhất Việt Nam. Bãi Trường chính là dải bờ biển vàng để tận hưởng những khoảnh khắc nắng tà chuyển màu cam tím vô cùng quyến rũ.</p>
                         
                         <h4>1. Sunset Sanato Beach Club</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Bắc Bãi Trường, Dương Tơ, Phú Quốc</div>
-                        <p>Nổi tiếng với những chú voi bay và các tác phẩm điêu khắc nghệ thuật khổng lồ trên bãi biển. Đây là nơi ngắm mặt trời lặn lãng mạn nhất với các nấc thang lên thiên đường rực rỡ.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Bắc Bãi Trường, Dương Tơ, Phú Quốc</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 09:00 - 21:00</div>
+                        <p>Nổi tiếng với những chú voi bay chân dài, mặt người khổng lồ và nấc thang lên thiên đường nổi tiếng thế giới. Đây là điểm check-in "vàng" mà bất kỳ du khách nào cũng phải ghé thăm ít nhất một lần khi ở tại Hotel Boutique. Hãy đến trước 5 giờ chiều để chọn được chỗ ngồi đẹp nhất ngắm mặt trời lặn sát mặt biển.</p>
                         
                         <h4>2. OCSEN Beach Bar & Club</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 118/10 Trần Hưng Đạo, Dương Tơ</div>
-                        <p>Với những chiếc gối ôm màu cam đặc trưng đặt ngay trên cát, đây là tọa độ yêu thích của giới trẻ. Bạn có thể vừa thưởng thức Cocktail vừa nghe nhạc Acoustic khi ánh chiều tà buông xuống.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 118/10 Trần Hưng Đạo, Dương Tơ</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 16:00 - 00:00</div>
+                        <p>Với những chiếc gối ôm màu cam rực rỡ đặt ngay trên bãi cát mịn, OCSEN mang đến không gian trẻ trung và phóng khoáng. Bạn có thể nằm thư giãn, nhâm nhi một ly Mojito mát lạnh và hòa mình vào điệu nhạc Acoustic sâu lắng khi mặt trời khuất dần phía chân trời.</p>
                         
                         <h4>3. Chuồn Chuồn Bistro & Bar</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Đồi Sao Mai, Trần Hưng Đạo, Dương Đông</div>
-                        <p>Vị trí đắc địa trên đỉnh đồi cao nhất thị trấn. Từ đây, bạn phóng tầm mắt bao quát toàn cảnh vịnh Thái Lan và thị trấn Dương Đông trong sắc vàng cam rực rỡ.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Đồi Sao Mai, Trần Hưng Đạo, Dương Đông</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 07:30 - 22:30</div>
+                        <p>Tọa lạc trên đỉnh đồi cao nhất thị trấn, Chuồn Chuồn mang đến góc nhìn panorama toàn cảnh thị trấn Dương Đông và Bãi Trường từ trên cao. Cảm giác ngắm nhìn toàn bộ hòn đảo chuyển mình sang sắc vàng rực rỡ và tím thẫm của chiều tà từ vị trí này là một trải nghiệm vô cùng kỳ vĩ.</p>
                         
                         <h4>4. Sailing Club Phu Quoc</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Lô B7, Khu phức hợp Marina, Bãi Trường</div>
-                        <p>Câu lạc bộ bãi biển sang trọng với hồ bơi vô cực sát biển. Nơi đây thường xuyên có các buổi biểu diễn múa lửa chuyên nghiệp từ các nghệ sĩ quốc tế ngay sau khi mặt trời lặn.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Lô B7, Khu phức hợp Marina, Bãi Trường</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 12:00 - 22:00</div>
+                        <p>Một điểm đến sang trọng với hồ bơi vô cực sát biển và các sự kiện âm nhạc điện tử sôi động. Sau khi ngắm hoàng hôn, du khách còn được thưởng thức những buổi trình diễn múa lửa chuyên nghiệp từ các nghệ sĩ quốc tế, mang lại không khí náo nhiệt cho buổi đêm đảo Ngọc.</p>
                         
                         <h4>5. Dinh Cậu</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Khu phố 2, Dương Đông, Phú Quốc</div>
-                        <p>Biểu tượng văn hóa linh thiêng của đảo. Ngắm mặt trời khuất dần sau ngọn hải đăng cổ kính và những ghềnh đá gồ ghề mang đến cảm giác bình yên lạ thường.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Khu phố 2, Dương Đông, Phú Quốc</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: Cả ngày (Sunset đẹp nhất 17:00-18:30)</div>
+                        <p>Ngắm mặt trời lặn sau những mỏm đá gồ ghề và ngọn hải đăng cổ kính tại Dinh Cậu là trải nghiệm mang đậm nét văn hóa tâm linh đặc trưng. Sự kết hợp giữa nét hoang sơ của thiên nhiên và vẻ trang nghiêm của ngôi đền cổ tạo nên một khung cảnh bình yên lạ thường cho bất kỳ ai dừng chân.</p>
                     ` 
                 },
                 'en': { 
                     title: 'Top 5 Most Radiant Sunset Spots in Long Beach', 
                     content: `
                         <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
-                        <p class="text-xl">Phu Quoc is known as the best sunset spot in Vietnam. Long Beach is the golden coastline to enjoy this magical moment.</p>
+                        <p class="text-xl">Phu Quoc is known as the best place to watch the sunset in Vietnam. Long Beach is the golden coastline to enjoy this magical moment of nature.</p>
                         
                         <h4>1. Sunset Sanato Beach Club</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> North Long Beach, Duong To, Phu Quoc</div>
-                        <p>Famous for flying elephants and giant artistic sculptures on the beach. This is the most romantic spot with vibrant stairs to heaven as the sun sets.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> North Long Beach, Duong To, Phu Quoc</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Opening Hours: 09:00 - 21:00</div>
+                        <p>Famous for long-legged flying elephants, giant face sculptures, and stairs to heaven. This is the "Golden" check-in spot near Hotel Boutique. Arrive before 5 PM to secure the best view of the sun dipping into the ocean.</p>
                         
                         <h4>2. OCSEN Beach Bar & Club</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 118/10 Tran Hung Dao St, Duong To</div>
-                        <p>With iconic orange bean bags placed directly on the sand, this is a favorite for young travelers. Enjoy a cocktail and acoustic music as dusk falls.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 118/10 Tran Hung Dao St, Duong To</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Opening Hours: 16:00 - 00:00</div>
+                        <p>With iconic orange bean bags placed directly on the sand, OCSEN offers a youthful and free vibe. Enjoy a refreshing Mojito and acoustic music as the sun disappears right into the sea.</p>
                         
                         <h4>3. Chuon Chuon Bistro & Bar</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Sao Mai Hill, Tran Hung Dao, Duong Dong</div>
-                        <p>Located on the highest hill in town. From here, you can see a panoramic view of the Gulf of Thailand and Duong Dong town in brilliant golden hues.</p>
-                        
-                        <h4>4. Sailing Club Phu Quoc</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Marina Complex, Long Beach</div>
-                        <p>A luxury beach club with an infinity pool. Features international fire dance performances right after the sun disappears below the horizon.</p>
-                        
-                        <h4>5. Dinh Cau Rock</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Ward 2, Duong Dong, Phu Quoc</div>
-                        <p>A sacred cultural symbol. Watching the sun set behind the ancient lighthouse and rugged rocks brings an extraordinary sense of peace.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Sao Mai Hill, Tran Hung Dao, Duong Dong</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Opening Hours: 07:30 - 22:30</div>
+                        <p>Located on the highest hill in town, Chuon Chuon offers a panoramic sunset view over Duong Dong and the entire Long Beach. Seeing the island transform into brilliant golden and purple hues from here is breathtaking.</p>
                     ` 
                 }
             },
@@ -382,27 +401,32 @@
                     title: 'Ăn gì ở Đảo Ngọc? Những món hải sản trứ danh', 
                     content: `
                         <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
-                        <h2 class="text-3xl font-bold mb-8 text-emerald-900">Khám phá vị giác tại thiên đường ẩm thực</h2>
+                        <h2 class="text-3xl font-bold mb-8 text-emerald-900">Hành trình khám phá vị giác Phú Quốc</h2>
                         
                         <h4>1. Bún Quậy Kiến Xây</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bạch Đằng, Dương Đông</div>
-                        <p>Món ăn mang đậm dấu ấn bản địa nơi thực khách tự tay pha nước chấm theo công thức riêng. Chả cá và chả tôm tươi được quết mỏng vào tô bún nóng hổi, ngọt thanh vị biển.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bạch Đằng, Dương Đông</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 07:30 - 23:30</div>
+                        <p>Món ăn "quậy" đúng nghĩa nơi thực khách tự tay pha nước chấm từ muối, đường, tiêu, chanh và ớt theo công thức riêng. Chả cá và chả tôm tươi được quết mỏng vào tô bún nóng hổi, tạo nên vị ngọt thanh khiết của hải sản tươi roi rói vừa đánh bắt.</p>
                         
                         <h4>2. Gỏi Cá Trích - Quán Việt</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 261 Nguyễn Trung Trực, Dương Đông</div>
-                        <p>Sự kết hợp tinh tế giữa thịt cá tươi sống, dừa nạo béo, lạc rang bùi cuốn trong bánh tráng phơi sương. Nước chấm mắm cốt Phú Quốc tạo nên hương vị đặc sản không thể quên.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 261 Nguyễn Trung Trực, Dương Đông</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 10:00 - 22:00</div>
+                        <p>Sự kết hợp tinh tế giữa thịt cá tươi sống, dừa nạo béo ngậy, đậu phộng bùi bùi cuốn trong bánh tráng phơi sương. Nước chấm làm từ mắm cốt Phú Quốc truyền thống tạo nên hương vị đặc sản không thể quên cho bất kỳ ai lần đầu thưởng thức.</p>
                         
                         <h4>3. Ghẹ Hàm Ninh</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Làng chài Hàm Ninh, phía Đông Đảo</div>
-                        <p>Ghẹ Hàm Ninh tuy không quá to nhưng thịt cực kỳ chắc và ngọt lịm. Chỉ cần hấp sả đơn giản là đủ để cảm nhận trọn vẹn tinh túy của hải sản đảo Phú Quốc.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Làng chài Hàm Ninh, phía Đông Đảo</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 08:00 - 22:00</div>
+                        <p>Ghẹ Hàm Ninh nổi tiếng nhỏ nhưng cực kỳ chắc thịt và ngọt lịm. Chỉ cần hấp sả đơn giản để giữ trọn vẹn vị tinh túy từ biển cả. Thưởng thức ghẹ ngay tại các nhà bè ven biển Làng chài cổ là một trải nghiệm ẩm thực vô cùng mộc mạc và thú vị.</p>
                         
                         <h4>4. Nhum biển nướng mỡ hành</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Chợ Đêm Phú Quốc, Dương Đông</div>
-                        <p>Món ăn bổ dưỡng được ví như "nhân sâm của biển". Nhum tươi nướng trên than hồng cùng chút mỡ hành thơm nức và lạc rang giòn là món nhắm cực đỉnh buổi tối.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Chợ Đêm Phú Quốc, Dương Đông</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 17:00 - 23:30</div>
+                        <p>Được mệnh danh là "nhân sâm của biển", nhum tươi được nướng trên than hồng cùng chút mỡ hành thơm nức và đậu phộng rang giòn. Vị béo ngậy đặc trưng của gạch nhum hòa quyện cùng mùi khói than hồng sẽ làm hài lòng những thực khách khó tính nhất.</p>
                         
                         <h4>5. Bún Kèn Út Lượm</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 87 Đường 30 Tháng 4, Dương Đông</div>
-                        <p>Một món bún lạ miệng mang phong cách Khmer với nước dùng sền sệt nấu từ cá ngân xay nhuyễn, nước cốt dừa béo ngậy và bột nghệ thơm lừng.</p>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 87 Đường 30 Tháng 4, Dương Đông</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Giờ mở cửa: 06:00 - 10:00 (Nên đến sớm)</div>
+                        <p>Một món bún độc đáo mang phong cách ẩm thực Khmer. Nước dùng được nấu sền sệt từ cá ngân xay nhuyễn, nước cốt dừa béo ngậy và bột nghệ thơm lừng, ăn kèm với đu đủ bào sợi giòn tan và rau thơm, tạo nên hương vị bùi béo đặc trưng khó lẫn.</p>
                     ` 
                 },
                 'en': { 
@@ -411,25 +435,10 @@
                         <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
                         <h2 class="text-3xl font-bold mb-8 text-emerald-900">A Taste Journey in Culinary Paradise</h2>
                         
-                        <h4>1. Bun Quay Kien Xay</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bach Dang St, Duong Dong</div>
-                        <p>A unique local noodle soup where diners mix their own sauce. Fresh shrimp and fish paste are whipped thin into a hot bowl, offering a sweet oceanic taste.</p>
-                        
-                        <h4>2. Herring Salad (Goi Ca Trich)</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 261 Nguyen Trung Truc St, Duong Dong</div>
-                        <p>A refined combo of raw fish, creamy coconut, and peanuts wrapped in rice paper. The signature Phu Quoc fish sauce creates an unforgettable flavor.</p>
-                        
-                        <h4>3. Ham Ninh Blue Crab</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Ham Ninh Village, East Coast</div>
-                        <p>Ham Ninh crabs are famous for being firm and incredibly sweet. Simply steamed with lemongrass to preserve the natural essence of the sea.</p>
-                        
-                        <h4>4. Grilled Sea Urchin</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Night Market, Duong Dong</div>
-                        <p>Nutritious and often called "sea ginseng". Grilled on charcoal with fragrant spring onion oil and roasted peanuts, it's a perfect evening treat.</p>
-                        
-                        <h4>5. Bun Ken Ut Luom</h4>
-                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 87 St 30/4, Duong Dong</div>
-                        <p>A unique noodle soup influenced by Khmer style with thick broth made from ground fish, creamy coconut milk, and aromatic turmeric.</p>
+                        <h4>1. Bun Quay Kien Xay (Stirred Noodles)</h4>
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bach Dang St, Duong Dong</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Hours: 07:30 - 23:30</div>
+                        <p>A unique local noodle soup where diners mix their own signature dipping sauce at the table. Fresh shrimp and fish paste are whipped thin into a boiling hot broth, delivering a sweet and pure oceanic taste.</p>
                     ` 
                 }
             },
@@ -438,44 +447,27 @@
                     title: 'Mẹo đặt phòng mùa cao điểm có giá ưu đãi', 
                     content: `
                         <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
-                        <h2 class="text-3xl font-bold mb-8 text-emerald-900">Bí quyết săn phòng 3 sao giá tốt</h2>
+                        <h2 class="text-3xl font-bold mb-8 text-emerald-900">Bí quyết sở hữu kỳ nghỉ 3 sao giá hời</h2>
                         
                         <h4>1. Đặt trực tiếp qua Hotline/Website</h4>
-                        <div class="address-tag"><i class="fas fa-phone-alt mr-2"></i> Hotline: 0933.484.668</div>
-                        <p>Tại Hotel Boutique, giá đặt trực tiếp luôn rẻ hơn 10-15% so với các sàn Agoda hay Booking do chúng tôi hỗ trợ tối đa cho khách hàng đặt trực tiếp.</p>
+                        <div class="address-tag"><i class="fas fa-phone-alt mr-2"></i> Hotline: 0933.484.668</div><br>
+                        <div class="time-tag"><i class="far fa-clock mr-2"></i> Tư vấn: 24/7</div>
+                        <p>Tại Hotel Boutique, giá đặt trực tiếp luôn rẻ hơn 10-15% so với các sàn OTA như Agoda hay Booking.com. Chúng tôi luôn dành những quỹ phòng đẹp nhất và ưu đãi đặc biệt cho khách hàng liên hệ trực tiếp.</p>
                         
                         <h4>2. Kiểm tra các gói Combo Tiết kiệm</h4>
                         <div class="address-tag"><i class="fas fa-gift mr-2"></i> Exclusive Combos</div>
-                        <p>Hãy ưu tiên các gói combo "Phòng + Đưa đón sân bay" để tiết kiệm chi phí di chuyển ngay khi vừa đáp xuống sân bay Phú Quốc.</p>
+                        <p>Hãy luôn hỏi nhân viên về các gói combo "Phòng + Đưa đón sân bay" hoặc "Phòng + Ăn sáng/tối". Những gói này giúp bạn tiết kiệm chi phí di chuyển và ăn uống đáng kể so với việc đặt riêng lẻ.</p>
                         
                         <h4>3. Đặt phòng sớm ít nhất 21 ngày</h4>
                         <div class="address-tag"><i class="fas fa-clock mr-2"></i> Early Bird Booking</div>
-                        <p>Mùa cao điểm (T11 - T4), các hạng phòng đẹp view biển thường hết rất nhanh. Việc đặt sớm giúp bạn giữ được hạng phòng ưng ý với mức giá tốt nhất.</p>
-                        
-                        <h4>4. Tham gia chương trình khách hàng thân thiết</h4>
-                        <p>Chúng tôi luôn có ưu đãi giảm giá thêm 5% cho những khách hàng đã từng lưu trú tại khách sạn trong những lần quay lại tiếp theo.</p>
-                        
-                        <h4>5. Theo dõi mạng xã hội của khách sạn</h4>
-                        <p>Nhiều mã giảm giá ngắn hạn và các chương trình Flash Sale chỉ được cập nhật trên Fanpage chính thức của Hotel Boutique.</p>
+                        <p>Mùa cao điểm (T11 - T4), các hạng phòng view biển thường hết rất nhanh. Việc đặt sớm trước 3-4 tuần giúp bạn vừa giữ được hạng phòng ưng ý nhất vừa nhận được giá Early Bird cực tốt từ khách sạn.</p>
                     ` 
                 },
                 'en': { 
-                    title: 'Booking Tips for Peak Season with Offers', 
+                    title: 'Peak Season Booking Tips for Best Offers', 
                     content: `
                         <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=1200" class="w-full h-96 object-cover rounded-[3rem] mb-12 shadow-2xl">
                         <h2 class="text-3xl font-bold mb-8 text-emerald-900">Secrets to Affordable Luxury Stays</h2>
-                        
-                        <h4>1. Book Direct via Hotline</h4>
-                        <div class="address-tag"><i class="fas fa-phone-alt mr-2"></i> Hotline: 0933.484.668</div>
-                        <p>At Hotel Boutique, direct rates are usually 10-15% cheaper than OTA sites like Agoda or Booking.com as we offer maximum support for direct guests.</p>
-                        
-                        <h4>2. Check Saving Combo Packages</h4>
-                        <div class="address-tag"><i class="fas fa-gift mr-2"></i> Exclusive Combos</div>
-                        <p>Prioritize "Room + Airport Shuttle" combos to save on transportation costs as soon as you land at Phu Quoc airport.</p>
-                        
-                        <h4>3. Book at least 21 days in advance</h4>
-                        <div class="address-tag"><i class="fas fa-clock mr-2"></i> Early Bird Booking</div>
-                        <p>In peak season (Nov - April), sea-view rooms sell out fast. Early booking helps you secure your favorite room at the best price.</p>
                     ` 
                 }
             }
@@ -503,7 +495,7 @@
                 if (translations[lang][key]) el.placeholder = translations[lang][key];
             });
 
-            // Nếu đang trong một bài viết, hãy cập nhật nội dung bài viết ngay lập tức
+            // Thời gian thực cập nhật bài viết nếu đang đọc
             if (activeArticleId) {
                 renderArticle(activeArticleId);
             }
@@ -524,7 +516,7 @@
         function renderArticle(articleId) {
             const data = articles[articleId][currentLang];
             document.getElementById('article-content').innerHTML = `
-                <h2 class="text-4xl md:text-6xl font-bold text-emerald-900 mb-10 leading-tight">${data.title}</h2>
+                <h1 class="text-4xl md:text-6xl font-bold text-emerald-900 mb-10 leading-tight">${data.title}</h1>
                 <div class="article-body">${data.content}</div>
             `;
         }
@@ -592,7 +584,6 @@
         function closeModal() { document.getElementById('result-modal').style.display = 'none'; }
         window.onclick = function(e) { if (e.target == document.getElementById('result-modal')) closeModal(); }
         
-        // Khởi tạo trang với tiếng Việt
         changeLanguage('vi');
     </script>
 </body>
