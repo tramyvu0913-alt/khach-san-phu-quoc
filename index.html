@@ -10,7 +10,6 @@
     <style>
         body { font-family: 'Lexend', sans-serif; scroll-behavior: smooth; }
         
-        /* Hero Video Styles */
         #home {
             position: relative;
             height: 100vh;
@@ -19,10 +18,13 @@
         
         .video-background {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
             object-fit: cover;
             z-index: -2;
         }
@@ -30,8 +32,19 @@
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.3));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
             z-index: -1;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); text-shadow: 0 0 15px rgba(255,255,255,0.9); }
+            50% { opacity: 0.6; transform: scale(1.03); text-shadow: 0 0 25px rgba(16,185,129,1); }
+        }
+        .blink-element {
+            animation: blink 2s infinite ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .bg-green-primary { background-color: #10b981; }
@@ -41,13 +54,20 @@
         #result-modal { display: none; position: fixed; inset: 0; z-index: 110; background: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; padding: 20px; }
         .page-content { display: none; }
         .page-content.active { display: block; }
+        
+        .lang-btn.active { color: #10b981; font-weight: 700; text-decoration: underline; }
+        
+        /* Article Styles */
+        .article-body h4 { font-weight: 700; color: #065f46; margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.25rem; }
+        .address-tag { display: inline-flex; align-items: center; background: #f0fdf4; color: #166534; padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; border: 1px solid #dcfce7; }
+        .article-body p { line-height: 1.8; color: #4b5563; margin-bottom: 1rem; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Loading & Modal -->
-    <div id="loading-overlay"><div class="text-center"><div class="inline-block w-12 h-12 border-4 border-green-primary border-t-transparent rounded-full animate-spin mb-4"></div><p class="text-emerald-900 font-bold">Đang xử lý...</p></div></div>
-    <div id="result-modal"><div class="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl relative"><button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400"><i class="fas fa-times text-2xl"></i></button><h3 class="text-2xl font-bold text-emerald-900 mb-6" id="modal-title">Thông báo</h3><div id="modal-content" class="space-y-4"></div></div></div>
+    <div id="loading-overlay"><div class="text-center"><div class="inline-block w-12 h-12 border-4 border-green-primary border-t-transparent rounded-full animate-spin mb-4"></div><p class="text-emerald-900 font-bold" data-i18n="processing">Đang xử lý...</p></div></div>
+    <div id="result-modal"><div class="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl relative"><button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400"><i class="fas fa-times text-2xl"></i></button><h3 class="text-2xl font-bold text-emerald-900 mb-6" id="modal-title" data-i18n="notification">Thông báo</h3><div id="modal-content" class="space-y-4"></div></div></div>
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -56,99 +76,178 @@
                 <div class="w-10 h-10 bg-green-primary rounded-lg flex items-center justify-center text-white"><i class="fas fa-hotel"></i></div>
                 <span class="text-2xl font-bold text-emerald-900 uppercase">Hotel <span class="text-green-primary">Boutique</span></span>
             </div>
-            <div class="hidden md:flex space-x-8 font-medium">
-                <a href="javascript:void(0)" onclick="showPage('home-page')" class="hover:text-green-primary">Trang chủ</a>
-                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('rooms').scrollIntoView(), 100)" class="hover:text-green-primary">Phòng nghỉ</a>
-                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('reviews').scrollIntoView(), 100)" class="hover:text-green-primary">Đánh giá</a>
-                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('blog').scrollIntoView(), 100)" class="hover:text-green-primary">Cẩm nang</a>
+            
+            <div class="hidden md:flex space-x-6 font-medium items-center">
+                <a href="javascript:void(0)" onclick="showPage('home-page')" class="hover:text-green-primary transition-colors" data-i18n="nav_home">Trang chủ</a>
+                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('rooms').scrollIntoView(), 100)" class="hover:text-green-primary transition-colors" data-i18n="nav_rooms">Phòng nghỉ</a>
+                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('booking-info-section').scrollIntoView(), 100)" class="hover:text-green-primary transition-colors" data-i18n="nav_booking">Đặt phòng</a>
+                <a href="javascript:void(0)" onclick="showPage('home-page'); setTimeout(()=>document.getElementById('blog').scrollIntoView(), 100)" class="hover:text-green-primary transition-colors" data-i18n="nav_blog">Cẩm nang</a>
+                
+                <div class="flex items-center gap-2 border-l pl-6 border-slate-200 text-sm">
+                    <button onclick="changeLanguage('vi')" id="lang-vi" class="lang-btn active">VI</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="changeLanguage('en')" id="lang-en" class="lang-btn">EN</button>
+                </div>
             </div>
-            <a href="tel:0933484668" class="bg-green-primary text-white px-6 py-2.5 rounded-full font-semibold shadow-lg">0933.484.668</a>
+            
+            <a href="tel:0933484668" class="bg-green-primary text-white px-6 py-2.5 rounded-full font-semibold shadow-lg hover:bg-emerald-600 transition-all">0933.484.668</a>
         </div>
     </nav>
 
     <!-- TRANG CHỦ -->
     <div id="home-page" class="page-content active pt-20">
-        <section id="home" class="flex items-center px-4 -mt-20">
-            <!-- Video Background -->
-            <video autoplay muted loop playsinline class="video-background">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-resort-swimming-pool-and-palm-trees-from-above-32692-large.mp4" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ video.
+        <section id="home" class="flex items-center px-4 -mt-20 text-center">
+            <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80" class="video-background">
+                <source src="https://v.ftcdn.net/02/10/44/21/700_F_210442188_l2h9Hl4rN0rO17OqF1Xk5k8S0rYI8s9z_ST.mp4" type="video/mp4">
             </video>
             <div class="hero-overlay"></div>
 
-            <div class="max-w-3xl mx-auto text-center text-white relative z-10">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">Nghỉ dưỡng xanh tại Bãi Trường</h1>
-                <p class="text-xl mb-8 drop-shadow-md">Trải nghiệm sự tươi mát và chuyên nghiệp tại trung tâm Đảo Ngọc.</p>
-                <div class="flex justify-center gap-4">
-                    <a href="#booking" class="bg-green-primary text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:bg-emerald-600 transition-all">ĐẶT PHÒNG NGAY</a>
-                    <a href="#rooms" class="bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:bg-white/30 transition-all">XEM PHÒNG</a>
+            <div class="max-w-4xl mx-auto text-white relative z-10">
+                <div class="blink-element bg-green-primary/90 backdrop-blur-sm px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest mb-8 shadow-2xl border border-white/20">
+                    <div class="flex gap-1.5 text-yellow-300 mr-2">
+                        <i class="fas fa-star drop-shadow-md"></i>
+                        <i class="fas fa-star drop-shadow-md"></i>
+                        <i class="fas fa-star drop-shadow-md"></i>
+                    </div>
+                    <span data-i18n="hero_tag">Khách sạn nghỉ dưỡng tiêu chuẩn 3 sao</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl" data-i18n="hero_title">Nghỉ dưỡng xanh tại Bãi Trường</h1>
+                <p class="text-xl md:text-2xl mb-10 drop-shadow-lg font-light" data-i18n="hero_subtitle">Khám phá không gian sang trọng, tươi mát tại tâm điểm Đảo Ngọc.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="document.getElementById('booking-info-section').scrollIntoView({behavior:'smooth'})" class="bg-green-primary text-white px-10 py-4 rounded-2xl font-bold shadow-xl hover:bg-emerald-600 transition-all uppercase tracking-widest" data-i18n="cta_book">ĐẶT PHÒNG NGAY</button>
+                    <button onclick="document.getElementById('rooms').scrollIntoView({behavior:'smooth'})" class="bg-white/10 backdrop-blur-md border border-white/40 text-white px-10 py-4 rounded-2xl font-bold shadow-xl hover:bg-white/20 transition-all uppercase tracking-widest" data-i18n="cta_rooms">XEM PHÒNG</button>
                 </div>
             </div>
         </section>
 
-        <section id="booking" class="relative -mt-16 z-20 px-4">
-            <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-6 border border-emerald-100">
+        <!-- Booking Bar -->
+        <section class="relative -mt-16 z-20 px-4">
+            <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-emerald-100">
                 <form class="grid grid-cols-1 md:grid-cols-4 gap-6" id="check-form">
-                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase">Nhận phòng</label><input type="date" required class="w-full px-4 py-2 bg-emerald-50 rounded-lg outline-none border border-emerald-100"></div>
-                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase">Trả phòng</label><input type="date" required class="w-full px-4 py-2 bg-emerald-50 rounded-lg outline-none border border-emerald-100"></div>
-                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase">Khách</label><select class="w-full px-4 py-2 bg-emerald-50 rounded-lg outline-none border border-emerald-100"><option>2 Người lớn</option><option>Gia đình</option></select></div>
-                    <div class="flex items-end"><button type="submit" class="w-full bg-green-primary text-white font-bold py-2.5 rounded-lg shadow-lg">KIỂM TRA</button></div>
+                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase" data-i18n="label_checkin">Nhận phòng</label><input type="date" required class="w-full px-4 py-3 bg-emerald-50 rounded-xl outline-none border border-emerald-100"></div>
+                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase" data-i18n="label_checkout">Trả phòng</label><input type="date" required class="w-full px-4 py-3 bg-emerald-50 rounded-xl outline-none border border-emerald-100"></div>
+                    <div><label class="block text-xs font-bold text-emerald-900 mb-2 uppercase" data-i18n="label_guests">Số khách</label><select class="w-full px-4 py-3 bg-emerald-50 rounded-xl outline-none border border-emerald-100"><option data-i18n="opt_2adults">2 Người lớn</option><option data-i18n="opt_family">Gia đình</option></select></div>
+                    <div class="flex items-end"><button type="submit" class="w-full bg-green-primary text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-emerald-600 transition-all uppercase tracking-widest" data-i18n="btn_find">TÌM PHÒNG</button></div>
                 </form>
             </div>
         </section>
 
+        <!-- Rooms -->
         <section id="rooms" class="py-24 max-w-7xl mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-12">Hạng phòng nghỉ dưỡng</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="h-64 w-full object-cover transition-transform">
-                    <div class="p-6"><h4 class="font-bold text-xl text-emerald-900">Standard Garden</h4><p class="text-slate-500 text-sm my-4">Không gian yên bình giữa vườn xanh.</p><div class="flex justify-between items-center"><span class="text-green-primary font-bold">1.200.000đ</span><button class="text-xs font-bold border-2 border-green-primary px-4 py-2 rounded-lg text-green-primary">CHI TIẾT</button></div></div>
+            <h2 class="text-4xl font-bold mb-4 text-emerald-900" data-i18n="rooms_title">Hạng phòng nghỉ dưỡng</h2>
+            <p class="text-slate-500 mb-16" data-i18n="rooms_subtitle">Chọn không gian thư giãn lý tưởng nhất cho bạn</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
+                <div class="room-card group bg-white rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-100 transition-all">
+                    <div class="overflow-hidden h-72"><img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-2xl text-emerald-900 mb-2">Standard Garden</h4>
+                        <p class="text-slate-500 text-sm mb-6" data-i18n="room1_desc">Tầm nhìn hướng vườn nhiệt đới xanh mát.</p>
+                        <div class="flex justify-between items-center pt-6 border-t border-slate-100">
+                            <span class="text-green-primary font-bold text-xl">1.200.000đ</span>
+                            <button onclick="scrollToBooking('Standard Garden')" class="text-sm font-bold border-2 border-green-primary px-6 py-2.5 rounded-xl text-green-primary hover:bg-green-primary hover:text-white transition-all" data-i18n="btn_book">ĐẶT PHÒNG</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-lg border-2 border-green-primary scale-105 z-10">
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="h-64 w-full object-cover transition-transform">
-                    <div class="p-6"><h4 class="font-bold text-xl text-emerald-900">Deluxe Ocean View</h4><p class="text-slate-500 text-sm my-4">Tầm nhìn panorama hướng thẳng biển.</p><div class="flex justify-between items-center"><span class="text-green-primary font-bold">1.800.000đ</span><button class="text-xs font-bold bg-green-primary px-4 py-2 rounded-lg text-white">ĐẶT NGAY</button></div></div>
+                <div class="room-card group bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-green-primary scale-105 z-10 transition-all">
+                    <div class="overflow-hidden h-72 relative">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    </div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-2xl text-emerald-900 mb-2">Deluxe Ocean View</h4>
+                        <p class="text-slate-500 text-sm mb-6" data-i18n="room2_desc">Chiêm ngưỡng biển Bãi Trường rực rỡ từ ban công.</p>
+                        <div class="flex justify-between items-center pt-6 border-t border-slate-100">
+                            <span class="text-green-primary font-bold text-xl">1.800.000đ</span>
+                            <button onclick="scrollToBooking('Deluxe Ocean View')" class="text-sm font-bold bg-green-primary px-6 py-2.5 rounded-xl text-white hover:bg-emerald-600 shadow-md transition-all" data-i18n="btn_book_now">ĐẶT NGAY</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="room-card bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="h-64 w-full object-cover transition-transform">
-                    <div class="p-6"><h4 class="font-bold text-xl text-emerald-900">Family Suite</h4><p class="text-slate-500 text-sm my-4">Rộng rãi và sang trọng cho gia đình.</p><div class="flex justify-between items-center"><span class="text-green-primary font-bold">2.500.000đ</span><button class="text-xs font-bold border-2 border-green-primary px-4 py-2 rounded-lg text-green-primary">CHI TIẾT</button></div></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="reviews" class="py-24 bg-slate-100">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <h2 class="text-3xl font-bold mb-16">Khách hàng nói gì về chúng tôi?</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm italic text-sm text-slate-600 border-b-4 border-green-primary">
-                        <div class="flex text-yellow-400 mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        "Khách sạn rất xanh và sạch sẽ. Nhân viên nhiệt tình, chỉ cách sân bay 10 phút đi xe!"
-                        <div class="mt-6 font-bold text-emerald-900 not-italic">- Anh Hoàng, Hà Nội</div>
+                <div class="room-card group bg-white rounded-[2.5rem] overflow-hidden shadow-lg border border-slate-100 transition-all">
+                    <div class="overflow-hidden h-72"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-2xl text-emerald-900 mb-2">Boutique Family Suite</h4>
+                        <p class="text-slate-500 text-sm mb-6" data-i18n="room3_desc">Không gian rộng rãi hoàn hảo cho cả gia đình.</p>
+                        <div class="flex justify-between items-center pt-6 border-t border-slate-100">
+                            <span class="text-green-primary font-bold text-xl">2.500.000đ</span>
+                            <button onclick="scrollToBooking('Boutique Family Suite')" class="text-sm font-bold border-2 border-green-primary px-6 py-2.5 rounded-xl text-green-primary hover:bg-green-primary hover:text-white transition-all" data-i18n="btn_book">ĐẶT PHÒNG</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="blog" class="py-24 bg-white px-4">
+        <!-- Booking Form -->
+        <section id="booking-info-section" class="py-24 bg-white px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-emerald-50 rounded-[3rem] p-8 md:p-16 border border-emerald-100 shadow-xl">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-emerald-900 mb-4 uppercase tracking-tighter" data-i18n="form_title">Thông tin Đặt phòng</h2>
+                        <p class="text-slate-600" data-i18n="form_subtitle">Nhân viên sẽ gọi lại xác nhận ngay sau khi bạn gửi yêu cầu.</p>
+                    </div>
+                    <form id="final-booking-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <input type="text" id="full-name" required data-placeholder="placeholder_name" class="w-full px-6 py-4 rounded-2xl outline-none shadow-sm border-none">
+                            <input type="tel" id="phone-number" required data-placeholder="placeholder_phone" class="w-full px-6 py-4 rounded-2xl outline-none shadow-sm border-none">
+                        </div>
+                        <input type="email" id="email-addr" data-placeholder="placeholder_email" class="w-full px-6 py-4 rounded-2xl outline-none shadow-sm border-none">
+                        <select id="selected-room-type" class="w-full px-6 py-4 rounded-2xl outline-none bg-white shadow-sm border-none appearance-none">
+                            <option value="Deluxe Ocean View">Deluxe Ocean View</option>
+                            <option value="Standard Garden">Standard Garden</option>
+                            <option value="Boutique Family Suite">Boutique Family Suite</option>
+                        </select>
+                        <textarea id="special-note" rows="3" data-placeholder="placeholder_note" class="w-full px-6 py-4 rounded-2xl outline-none shadow-sm border-none"></textarea>
+                        <button type="submit" class="w-full bg-green-primary text-white font-bold py-5 rounded-2xl shadow-xl hover:bg-emerald-600 transition-all uppercase tracking-widest text-lg" data-i18n="btn_submit_form">XÁC NHẬN GỬI THÔNG TIN</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews -->
+        <section id="reviews" class="py-24 bg-emerald-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-16 text-emerald-900 uppercase tracking-tight" data-i18n="reviews_title">Khách hàng nói gì?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-md border-b-8 border-green-primary hover:-translate-y-2 transition-transform">
+                        <div class="flex text-yellow-400 mb-6 font-bold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-slate-600 italic leading-relaxed" data-i18n="review1_text">"Khách sạn rất xanh và sạch sẽ. Nhân viên nhiệt tình, chỉ cách sân bay 10 phút đi xe nên rất tiện lợi!"</p>
+                        <div class="mt-8 font-bold text-emerald-900 border-t pt-4 text-sm" data-i18n="review1_user">- Anh Hoàng, Hà Nội</div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-md border-b-8 border-green-primary hover:-translate-y-2 transition-transform">
+                        <div class="flex text-yellow-400 mb-6 font-bold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="text-slate-600 italic leading-relaxed" data-i18n="review2_text">"View biển Bãi Trường buổi chiều rất đẹp. Đồ ăn sáng tại nhà hàng Lá Xanh đa dạng và hải sản cực kỳ tươi ngon."</p>
+                        <div class="mt-8 font-bold text-emerald-900 border-t pt-4 text-sm" data-i18n="review2_user">- Chị Lan, TP.HCM</div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-md border-b-8 border-green-primary hover:-translate-y-2 transition-transform">
+                        <div class="flex text-yellow-400 mb-6 font-bold"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                        <p class="text-slate-600 italic leading-relaxed" data-i18n="review3_text">"Phòng Suite rất rộng, thiết kế tinh tế. Gia đình tôi đã có một kỳ nghỉ vô cùng thư giãn và ấm cúng tại Phú Quốc."</p>
+                        <div class="mt-8 font-bold text-emerald-900 border-t pt-4 text-sm" data-i18n="review3_user">- Gia đình chị Vy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog -->
+        <section id="blog" class="py-24 bg-white px-4 text-center">
             <div class="max-w-7xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-16">Cẩm nang du lịch Phú Quốc</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <h2 class="text-3xl font-bold text-center mb-16 uppercase tracking-tighter" data-i18n="blog_title">Cẩm nang du lịch Phú Quốc</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
                     <div class="group cursor-pointer" onclick="showArticle('sunset')">
-                        <div class="overflow-hidden rounded-2xl mb-4"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600" class="h-48 w-full object-cover group-hover:scale-110 transition"></div>
-                        <h5 class="font-bold text-lg mb-2 group-hover:text-green-primary">Top 5 địa điểm ngắm hoàng hôn đẹp nhất Bãi Trường</h5>
-                        <p class="text-sm text-slate-500">Khám phá những góc check-in triệu like ngay gần khách sạn...</p>
-                        <span class="text-green-primary text-xs font-bold mt-4 block uppercase tracking-wider">Đọc thêm <i class="fas fa-arrow-right ml-1"></i></span>
+                        <div class="overflow-hidden rounded-3xl mb-6 shadow-xl"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600" class="h-64 w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                        <h5 class="font-bold text-xl mb-3 group-hover:text-green-primary transition-colors" data-i18n="blog1_title">Top 5 địa điểm ngắm hoàng hôn rực rỡ nhất</h5>
+                        <p class="text-sm text-slate-500 mb-4" data-i18n="blog1_subtitle">Khám phá 5 tọa độ "sống ảo" đẹp mê hồn ngay tại Bãi Trường và Dương Đông...</p>
+                        <span class="text-green-primary text-xs font-bold uppercase tracking-widest border-b-2 border-green-primary pb-1" data-i18n="btn_read">Đọc bài viết <i class="fas fa-arrow-right ml-1"></i></span>
                     </div>
                     <div class="group cursor-pointer" onclick="showArticle('food')">
-                        <div class="overflow-hidden rounded-2xl mb-4"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600" class="h-48 w-full object-cover group-hover:scale-110 transition"></div>
-                        <h5 class="font-bold text-lg mb-2 group-hover:text-green-primary">Ăn gì ở Phú Quốc? Gợi ý các món hải sản phải thử</h5>
-                        <p class="text-sm text-slate-500">Từ bún quậy đến gỏi cá trích, hương vị biển đảo không thể quên...</p>
-                        <span class="text-green-primary text-xs font-bold mt-4 block uppercase tracking-wider">Đọc thêm <i class="fas fa-arrow-right ml-1"></i></span>
+                        <div class="overflow-hidden rounded-3xl mb-6 shadow-xl"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600" class="h-64 w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                        <h5 class="font-bold text-xl mb-3 group-hover:text-green-primary transition-colors" data-i18n="blog2_title">Ăn gì ở Đảo Ngọc? Những món hải sản trứ danh</h5>
+                        <p class="text-sm text-slate-500 mb-4" data-i18n="blog2_subtitle">Khám phá các quán ăn gia truyền từ gỏi cá trích đến bún quậy trứ danh...</p>
+                        <span class="text-green-primary text-xs font-bold uppercase tracking-widest border-b-2 border-green-primary pb-1" data-i18n="btn_read">Đọc bài viết <i class="fas fa-arrow-right ml-1"></i></span>
                     </div>
                     <div class="group cursor-pointer" onclick="showArticle('booking-tips')">
-                        <div class="overflow-hidden rounded-2xl mb-4"><img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600" class="h-48 w-full object-cover group-hover:scale-110 transition"></div>
-                        <h5 class="font-bold text-lg mb-2 group-hover:text-green-primary">Kinh nghiệm đặt phòng khách sạn mùa cao điểm</h5>
-                        <p class="text-sm text-slate-500">Làm sao để có giá tốt nhất và không lo hết phòng...</p>
-                        <span class="text-green-primary text-xs font-bold mt-4 block uppercase tracking-wider">Đọc thêm <i class="fas fa-arrow-right ml-1"></i></span>
+                        <div class="overflow-hidden rounded-3xl mb-6 shadow-xl"><img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=600" class="h-64 w-full object-cover group-hover:scale-110 transition duration-700"></div>
+                        <h5 class="font-bold text-xl mb-3 group-hover:text-green-primary transition-colors" data-i18n="blog3_title">Mẹo đặt phòng mùa cao điểm có giá ưu đãi</h5>
+                        <p class="text-sm text-slate-500 mb-4" data-i18n="blog3_subtitle">Bí quyết sở hữu căn phòng view biển mà không lo hết chỗ hay giá cao...</p>
+                        <span class="text-green-primary text-xs font-bold uppercase tracking-widest border-b-2 border-green-primary pb-1" data-i18n="btn_read">Đọc bài viết <i class="fas fa-arrow-right ml-1"></i></span>
                     </div>
                 </div>
             </div>
@@ -158,89 +257,249 @@
     <!-- TRANG CHI TIẾT BÀI VIẾT -->
     <div id="article-page" class="page-content pt-32 pb-24 bg-white">
         <div class="max-w-4xl mx-auto px-4">
-            <button onclick="showPage('home-page')" class="mb-8 text-green-primary font-bold flex items-center gap-2 hover:-translate-x-2 transition-transform">
-                <i class="fas fa-chevron-left"></i> Quay lại trang chủ
+            <button onclick="showPage('home-page')" class="mb-10 text-green-primary font-bold flex items-center gap-2 hover:-translate-x-2 transition-all">
+                <i class="fas fa-chevron-left"></i> <span data-i18n="btn_back">Quay lại trang chủ</span>
             </button>
-            <div id="article-content">
-                <!-- Nội dung bài viết sẽ được chèn vào đây -->
+            <div id="article-content" class="article-body max-w-none">
+                <!-- Nội dung được nạp qua JS -->
             </div>
         </div>
     </div>
 
     <footer class="bg-slate-900 text-slate-400 py-20 px-4 text-center">
-        <div class="max-w-7xl mx-auto border-b border-slate-800 pb-12 mb-8">
-            <h4 class="text-white font-bold text-xl mb-4 uppercase text-white">Hotel Boutique</h4>
-            <p>Bãi Trường, Dương Tơ, Phú Quốc | Hotline: 0933.484.668</p>
+        <div class="max-w-7xl mx-auto border-b border-slate-800 pb-12 mb-8 text-white uppercase font-bold text-xl tracking-tighter">
+            Hotel <span class="text-green-primary">Boutique</span>
         </div>
-        <p class="text-xs">&copy; 2026 Hotel Boutique Phu Quoc. Designed for My - FPT University.</p>
+        <p data-i18n="footer_contact">Bãi Trường, Dương Tơ, Phú Quốc | Hotline: 0933.484.668</p>
+        <p class="text-[10px] uppercase tracking-widest font-medium mt-10 opacity-50">&copy; 2026 Hotel Boutique Phu Quoc. Designed for My - FPT University.</p>
     </footer>
 
     <script>
+        const translations = {
+            'vi': {
+                'processing': 'Đang xử lý...', 'notification': 'Thông báo', 'nav_home': 'Trang chủ', 'nav_rooms': 'Phòng nghỉ',
+                'nav_booking': 'Đặt phòng', 'nav_blog': 'Cẩm nang', 'hero_tag': 'Khách sạn nghỉ dưỡng tiêu chuẩn 3 sao',
+                'hero_title': 'Nghỉ dưỡng xanh tại Bãi Trường', 'hero_subtitle': 'Khám phá không gian sang trọng, tươi mát tại tâm điểm Đảo Ngọc.',
+                'cta_book': 'ĐẶT PHÒNG NGAY', 'cta_rooms': 'XEM PHÒNG', 'label_checkin': 'Nhận phòng', 'label_checkout': 'Trả phòng',
+                'label_guests': 'Số khách', 'opt_2adults': '2 Người lớn', 'opt_family': 'Gia đình', 'btn_find': 'TÌM PHÒNG',
+                'rooms_title': 'Hạng phòng nghỉ dưỡng', 'rooms_subtitle': 'Chọn không gian thư giãn lý tưởng nhất cho bạn',
+                'room1_desc': 'Tầm nhìn hướng vườn nhiệt đới xanh mát.', 'room2_desc': 'Chiêm ngưỡng biển Bãi Trường rực rỡ từ ban công.',
+                'room3_desc': 'Không gian rộng rãi hoàn hảo cho cả gia đình.', 'btn_book': 'ĐẶT PHÒNG', 'btn_book_now': 'ĐẶT NGAY',
+                'form_title': 'Thông tin Đặt phòng', 'form_subtitle': 'Nhân viên sẽ gọi lại xác nhận ngay sau khi bạn gửi yêu cầu.',
+                'placeholder_name': 'Họ và tên *', 'placeholder_phone': 'Số điện thoại *', 'placeholder_email': 'Email (Không bắt buộc)',
+                'placeholder_note': 'Yêu cầu đặc biệt...', 'btn_submit_form': 'XÁC NHẬN GỬI THÔNG TIN',
+                'reviews_title': 'Khách hàng nói gì?', 'review1_text': '"Khách sạn rất xanh và sạch sẽ. Nhân viên nhiệt tình, chỉ cách sân bay 10 phút đi xe nên rất tiện lợi!"',
+                'review1_user': '- Anh Hoàng, Hà Nội', 'review2_text': '"View biển Bãi Trường buổi chiều rất đẹp. Đồ ăn sáng tại nhà hàng Lá Xanh đa dạng và hải sản cực kỳ tươi ngon."',
+                'review2_user': '- Chị Lan, TP.HCM', 'review3_text': '"Phòng Suite rất rộng, thiết kế tinh tế. Gia đình tôi đã có một kỳ nghỉ vô cùng thư giãn và ấm cúng tại Phú Quốc."',
+                'review3_user': '- Gia đình chị Vy', 'blog_title': 'Cẩm nang du lịch Phú Quốc', 'blog1_title': 'Top 5 địa điểm ngắm hoàng hôn rực rỡ nhất',
+                'blog1_subtitle': 'Khám phá 5 tọa độ "sống ảo" đẹp mê hồn ngay tại Bãi Trường...', 'blog2_title': 'Ăn gì ở Đảo Ngọc? Những món hải sản trứ danh',
+                'blog2_subtitle': 'Hành trình khám phá vị giác từ gỏi cá trích đến bún quậy trứ danh...', 'blog3_title': 'Mẹo đặt phòng mùa cao điểm có giá ưu đãi',
+                'blog3_subtitle': 'Bí quyết sở hữu căn phòng view biển mà không lo hết chỗ hay giá cao...', 'btn_read': 'Đọc bài viết',
+                'btn_back': 'Quay lại trang chủ', 'footer_contact': 'Bãi Trường, Dương Tơ, Phú Quốc | Hotline: 0933.484.668',
+                'msg_success_title': 'Yêu cầu đã được gửi!', 'msg_success_body': 'Thông tin của bạn đã được tiếp nhận. Chúng tôi sẽ gọi lại xác nhận trong 15 phút.', 'msg_understand': 'ĐÃ HIỂU', 'msg_rooms_found': 'Danh sách phòng trống', 'msg_last_rooms': 'Còn đúng 2 phòng trống!'
+            },
+            'en': {
+                'processing': 'Processing...', 'notification': 'Notification', 'nav_home': 'Home', 'nav_rooms': 'Rooms',
+                'nav_booking': 'Booking', 'nav_blog': 'Guide', 'hero_tag': '3-Star Luxury Resort Standard',
+                'hero_title': 'Green Retreat at Long Beach', 'hero_subtitle': 'Discover a luxury, fresh space in the heart of Pearl Island.',
+                'cta_book': 'BOOK NOW', 'cta_rooms': 'VIEW ROOMS', 'label_checkin': 'Check-in', 'label_checkout': 'Check-out',
+                'label_guests': 'Guests', 'opt_2adults': '2 Adults', 'opt_family': 'Family', 'btn_find': 'FIND ROOMS',
+                'rooms_title': 'Our Accommodations', 'rooms_subtitle': 'Choose your perfect relaxation space',
+                'room1_desc': 'Views of the lush tropical garden.', 'room2_desc': 'Admire the vibrant Long Beach from your balcony.',
+                'room3_desc': 'Spacious and perfect for the whole family.', 'btn_book': 'BOOK ROOM', 'btn_book_now': 'BOOK NOW',
+                'form_title': 'Booking Information', 'form_subtitle': 'Our staff will call you to confirm within 15 minutes.',
+                'placeholder_name': 'Full Name *', 'placeholder_phone': 'Phone Number *', 'placeholder_email': 'Email (Optional)',
+                'placeholder_note': 'Special requests...', 'btn_submit_form': 'CONFIRM SUBMISSION',
+                'reviews_title': 'What Guests Say?', 'review1_text': '"The hotel is very green and clean. The staff are enthusiastic, just 10 mins from the airport!"',
+                'review1_user': '- Mr. Hoang, Hanoi', 'review2_text': '"The afternoon sea view is beautiful. Breakfast at La Xanh restaurant is diverse and seafood is very fresh."',
+                'review2_user': '- Ms. Lan, HCMC', 'review3_text': '"Suite is very spacious, elegant design. Our family had a very relaxing and cozy weekend."',
+                'review3_user': '- Ms. Vy & Family', 'blog_title': 'Phu Quoc Travel Guide', 'blog1_title': 'Top 5 Best Sunset Spots in Long Beach',
+                'blog1_subtitle': 'Discover 5 coordinates right at Long Beach and Duong Dong...', 'blog2_title': 'What to Eat in Pearl Island? Famous Seafood',
+                'blog2_subtitle': 'A journey to discover traditional dishes from herring salad to vermicelli...', 'blog3_title': 'Tips for Booking in Peak Season at Good Price',
+                'blog3_subtitle': 'Secrets to owning a sea view room without worrying about being fully booked...', 'btn_read': 'Read more',
+                'btn_back': 'Back to Homepage', 'footer_contact': 'Long Beach, Duong To, Phu Quoc | Hotline: 0933.484.668',
+                'msg_success_title': 'Request Sent!', 'msg_success_body': 'Your info has been received. We will call to confirm in 15 minutes.', 'msg_understand': 'I UNDERSTAND', 'msg_rooms_found': 'Available Rooms', 'msg_last_rooms': 'Only 2 rooms left!'
+            }
+        };
+
+        let currentLang = 'vi';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+
+            document.querySelectorAll('[data-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-placeholder');
+                if (translations[lang][key]) el.placeholder = translations[lang][key];
+            });
+        }
+
         const articles = {
             'sunset': {
-                title: 'Top 5 địa điểm ngắm hoàng hôn đẹp nhất Bãi Trường',
-                content: `
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-xl">
-                    <h2 class="text-4xl font-bold text-emerald-900 mb-6">Hoàng hôn rực rỡ tại Bãi Trường</h2>
-                    <p class="text-lg leading-relaxed text-slate-600 mb-6">Bãi Trường không chỉ là bãi biển dài nhất Phú Quốc mà còn là nơi đón những ánh hoàng hôn rực rỡ nhất. Dưới đây là 5 điểm bạn không thể bỏ qua khi ở tại Hotel Boutique:</p>
-                    <ul class="space-y-4 text-slate-600 list-disc pl-6 mb-8">
-                        <li><strong>Bãi biển trước khách sạn:</strong> Chỉ cần vài bước chân, bạn đã có thể ngồi trên cát và ngắm mặt trời lặn.</li>
-                        <li><strong>Sunset Sanato:</strong> Nơi có những chú voi bay biểu tượng.</li>
-                        <li><strong>OCI Beach Club:</strong> Vừa nhâm nhi cocktail vừa nghe nhạc chill.</li>
-                        <li><strong>Chuồn Chuồn Bistro:</strong> Ngắm toàn cảnh Bãi Trường từ trên cao.</li>
-                        <li><strong>Dinh Cậu:</strong> Một nét tâm linh hòa quyện cùng nắng chiều.</li>
-                    </ul>
-                `
+                'vi': { 
+                    title: 'Top 5 địa điểm ngắm hoàng hôn rực rỡ nhất Bãi Trường', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Chiêm ngưỡng 5 tọa độ hoàng hôn đẹp mê hồn</h2>
+                        <p class="text-lg text-slate-600 mb-8">Bãi Trường là nơi sở hữu đường bờ biển dài nhất Phú Quốc, vị trí hoàn hảo để đón những tia nắng tà cuối cùng trong ngày. Hãy lưu lại 5 địa chỉ cực phẩm sau:</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Bãi Trường, Dương Tơ, Phú Quốc</div>
+                        <h4>1. Sunset Sanato Beach Club</h4>
+                        <p>Nơi có những chú voi bay và biểu tượng mặt người khổng lồ nổi tiếng toàn cầu. Đây là điểm check-in "phải đến" khi du lịch Đảo Ngọc.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Đường Trần Hưng Đạo, Dương Tơ</div>
+                        <h4>2. OCSEN Beach Bar & Club</h4>
+                        <p>Với những chiếc gối ôm màu cam rực rỡ trên cát, bạn có thể vừa nhâm nhi cocktail vừa nghe nhạc acoustic chill khi mặt trời lặn.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Đồi Sao Mai, Dương Đông</div>
+                        <h4>3. Chuồn Chuồn Bistro & Bar</h4>
+                        <p>Tọa lạc trên đỉnh đồi cao nhất thị trấn, từ đây bạn có thể phóng tầm mắt bao quát toàn cảnh vịnh Thái Lan rực rỡ sắc cam chiều.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Bãi Trường (Gần Hotel Boutique)</div>
+                        <h4>4. Sailing Club Phu Quoc</h4>
+                        <p>Một không gian sang trọng với các buổi biểu diễn múa lửa nghệ thuật vào buổi tối, nằm ngay trung tâm khu vực Bãi Trường.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Thị trấn Dương Đông</div>
+                        <h4>5. Dinh Cậu</h4>
+                        <p>Sự kết hợp giữa nét tâm linh cổ kính và vẻ đẹp thiên nhiên. Ngắm mặt trời khuất dần sau những mỏm đá gồ ghề tại Dinh Cậu là một trải nghiệm khó quên.</p>
+                    ` 
+                },
+                'en': { 
+                    title: 'Top 5 Best Sunset Locations in Long Beach & Beyond', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Experience 5 Breathtaking Sunset Coordinates</h2>
+                        <p class="text-lg text-slate-600 mb-8">Long Beach is home to the longest coastline in Phu Quoc, the perfect position to catch the last rays of the day. Save these 5 premium addresses:</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Long Beach, Duong To</div>
+                        <h4>1. Sunset Sanato Beach Club</h4>
+                        <p>Home to the globally famous flying elephants and giant face sculptures. A must-visit check-in spot.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Tran Hung Dao St, Duong To</div>
+                        <h4>2. OCSEN Beach Bar & Club</h4>
+                        <p>With vibrant orange bean bags on the sand, enjoy cocktails and acoustic music as the sun dips below the horizon.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Sao Mai Hill, Duong Dong</div>
+                        <h4>3. Chuon Chuon Bistro & Bar</h4>
+                        <p>Located on the highest hill, offering a panoramic view of the Gulf of Thailand in brilliant orange hues.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Long Beach Area</div>
+                        <h4>4. Sailing Club Phu Quoc</h4>
+                        <p>A luxury space with artistic fire dance performances in the evening, right in the heart of Long Beach.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Duong Dong Town</div>
+                        <h4>5. Dinh Cau Rock</h4>
+                        <p>A blend of ancient spirituality and natural beauty. Watching the sun disappear behind the rocks is unforgettable.</p>
+                    ` 
+                }
             },
             'food': {
-                title: 'Ăn gì ở Phú Quốc? Gợi ý các món hải sản phải thử',
-                content: `
-                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-xl">
-                    <h2 class="text-4xl font-bold text-emerald-900 mb-6">Tinh hoa ẩm thực Đảo Ngọc</h2>
-                    <p class="text-lg leading-relaxed text-slate-600 mb-6">Đến với Phú Quốc mà chưa thưởng thức những món này thì thật là thiếu sót lớn:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-emerald-50 p-6 rounded-2xl">
-                            <h5 class="font-bold text-emerald-900 mb-2">Gỏi cá trích</h5>
-                            <p class="text-sm">Vị ngọt của cá tươi hòa quyện cùng dừa nạo và nước chấm đặc trưng.</p>
-                        </div>
-                        <div class="bg-emerald-50 p-6 rounded-2xl">
-                            <h5 class="font-bold text-emerald-900 mb-2">Bún Quậy Kiến Xây</h5>
-                            <p class="text-sm">Món ăn "quậy" đúng nghĩa với chả tôm, chả cá tươi rói.</p>
-                        </div>
-                    </div>
-                `
+                'vi': { 
+                    title: 'Ăn gì ở Đảo Ngọc? Những món hải sản trứ danh', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Hành trình khám phá vị giác Phú Quốc</h2>
+                        <p class="text-lg text-slate-600 mb-8">Đến Phú Quốc mà chưa thử 4 món đặc sản dưới đây tại các quán ăn uy tín này thì chưa phải là đi Phú Quốc:</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bạch Đằng, Dương Đông</div>
+                        <h4>1. Bún Quậy Kiến Xây</h4>
+                        <p>Món ăn mang đậm dấu ấn bản địa. Chả cá, chả tôm tươi được quết trực tiếp vào tô bún nóng hổi. Đừng quên tự pha chén nước chấm "quậy" theo công thức riêng của quán.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Quán Việt (261 Nguyễn Trung Trực)</div>
+                        <h4>2. Gỏi cá trích</h4>
+                        <p>Sự kết hợp tinh tế giữa thịt cá tươi, dừa nạo, đậu phộng bùi bùi cuốn trong bánh tráng phơi sương và nước mắm Phú Quốc truyền thống.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Làng chài Hàm Ninh</div>
+                        <h4>3. Ghẹ Hàm Ninh</h4>
+                        <p>Nổi tiếng với loại ghẹ nhỏ nhưng cực kỳ chắc thịt và ngọt lịm. Chỉ cần hấp sả là đủ để cảm nhận trọn vẹn hương vị biển khơi.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Chợ Đêm Phú Quốc</div>
+                        <h4>4. Nhum biển nướng mỡ hành</h4>
+                        <p>Món ăn bổ dưỡng và béo ngậy. Nhum biển tươi nướng trên than hồng cùng chút mỡ hành và đậu phộng rang là món nhắm tuyệt vời cho buổi tối.</p>
+                    ` 
+                },
+                'en': { 
+                    title: 'What to Eat? Signature Seafood in Pearl Island', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Phu Quoc Culinary Taste Journey</h2>
+                        <p class="text-lg text-slate-600 mb-8">Don't leave Phu Quoc without trying these 4 specialties at these reputable eateries:</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> 28 Bach Dang, Duong Dong</div>
+                        <h4>1. Bun Quay Kien Xay</h4>
+                        <p>A local signature noodle soup with fresh fish and shrimp paste. Remember to mix your own dipping sauce according to the house recipe.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Quan Viet (261 Nguyen Trung Truc)</div>
+                        <h4>2. Herring Salad (Goi Ca Trich)</h4>
+                        <p>A delicate combination of fresh fish, grated coconut, and peanuts wrapped in dew-drenched rice paper.</p>
+                        
+                        <div class="address-tag"><i class="fas fa-map-marker-alt mr-2"></i> Ham Ninh Fishing Village</div>
+                        <h4>3. Ham Ninh Blue Crab</h4>
+                        <p>Famous for small but incredibly firm and sweet meat. Simple steaming is enough to capture the ocean's essence.</p>
+                    ` 
+                }
             },
             'booking-tips': {
-                title: 'Kinh nghiệm đặt phòng khách sạn mùa cao điểm',
-                content: `
-                    <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-xl">
-                    <h2 class="text-4xl font-bold text-emerald-900 mb-6">Mẹo đặt phòng giá tốt tại Hotel Boutique</h2>
-                    <p class="text-lg leading-relaxed text-slate-600 mb-6">Mùa cao điểm Phú Quốc thường bắt đầu từ tháng 11 đến tháng 4 năm sau. Để có kỳ nghỉ trọn vẹn, hãy lưu ý:</p>
-                    <ol class="space-y-4 text-slate-600 list-decimal pl-6 mb-8">
-                        <li><strong>Đặt sớm ít nhất 1 tháng:</strong> Để đảm bảo còn hạng phòng view biển đẹp nhất.</li>
-                        <li><strong>Đặt trực tiếp qua Hotline:</strong> Để nhận được ưu đãi giảm giá 10% so với các sàn OTA.</li>
-                        <li><strong>Theo dõi Fanpage:</strong> Thường xuyên có các combo đưa đón sân bay miễn phí.</li>
-                    </ol>
-                `
+                'vi': { 
+                    title: 'Mẹo đặt phòng mùa cao điểm có giá ưu đãi', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Bí quyết sở hữu căn phòng view biển giá hời</h2>
+                        <p class="text-lg text-slate-600 mb-8">Lưu ngay 3 mẹo để có kỳ nghỉ 3 sao tại Bãi Trường mà không lo về giá:</p>
+                        
+                        <div class="address-tag"><i class="fas fa-phone-alt mr-2"></i> Hotline: 0933.484.668</div>
+                        <h4>1. Đặt phòng trực tiếp qua Website/Hotline</h4>
+                        <p>Luôn có giá ưu đãi rẻ hơn 10-15% so với đặt qua các trang Agoda hay Booking.com vì không phải chịu phí hoa hồng trung gian.</p>
+                        
+                        <h4>2. Chọn Combo "Phòng + Xe đưa đón"</h4>
+                        <p>Tại Hotel Boutique, chúng tôi thường xuyên có các gói combo miễn phí đưa đón sân bay nếu khách đặt từ 2 đêm trở lên.</p>
+                        
+                        <h4>3. Đặt phòng trước ít nhất 21 ngày</h4>
+                        <p>Đối với mùa cao điểm (tháng 11 - tháng 4), việc đặt sớm không chỉ giúp bạn giữ được hạng phòng đẹp nhất mà còn nhận được giá Early Bird cực tốt.</p>
+                    ` 
+                },
+                'en': { 
+                    title: 'Tips for Peak Season Booking with Best Offers', 
+                    content: `
+                        <img src="https://images.unsplash.com/photo-1596436889106-be35e843f974?w=1200" class="w-full h-96 object-cover rounded-3xl mb-12 shadow-2xl">
+                        <h2 class="text-4xl font-bold text-emerald-900 mb-6">Secrets to Affordable Sea View Rooms</h2>
+                        <p class="text-lg text-slate-600 mb-8">Save these 3 tips for a 3-star stay without breaking the bank:</p>
+                    ` 
+                }
             }
         };
 
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showArticle(articleId) {
-            const loading = document.getElementById('loading-overlay');
-            loading.style.display = 'flex';
-            
+            document.getElementById('loading-overlay').style.display = 'flex';
             setTimeout(() => {
-                loading.style.display = 'none';
-                const data = articles[articleId];
-                document.getElementById('article-content').innerHTML = data.content;
+                document.getElementById('loading-overlay').style.display = 'none';
+                const data = articles[articleId][currentLang];
+                document.getElementById('article-content').innerHTML = `
+                    <h2 class="text-4xl font-bold text-emerald-900 mb-8">${data.title}</h2>
+                    <div class="article-body">${data.content}</div>
+                `;
                 showPage('article-page');
-            }, 500);
+            }, 600);
+        }
+
+        function scrollToBooking(roomName) {
+            document.getElementById('selected-room-type').value = roomName;
+            document.getElementById('booking-info-section').scrollIntoView({ behavior: 'smooth' });
+            const formContainer = document.querySelector('#booking-info-section > div');
+            formContainer.classList.add('ring-4', 'ring-green-primary');
+            setTimeout(() => formContainer.classList.remove('ring-4', 'ring-green-primary'), 2000);
         }
 
         document.getElementById('check-form').addEventListener('submit', (e) => {
@@ -248,18 +507,47 @@
             document.getElementById('loading-overlay').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('loading-overlay').style.display = 'none';
-                document.getElementById('modal-title').innerText = "Phòng còn trống";
+                document.getElementById('modal-title').innerText = translations[currentLang]['msg_rooms_found'];
                 document.getElementById('modal-content').innerHTML = `
-                    <div class="p-4 bg-emerald-50 rounded-xl flex justify-between border border-emerald-100">
-                        <div><h5 class="font-bold">Deluxe Ocean View</h5><p class="text-xs text-slate-500 italic">Còn 2 phòng cuối cùng!</p></div>
-                        <div class="text-right"><div class="font-bold text-green-primary">1.800.000đ</div><button class="bg-green-primary text-white text-[10px] px-4 py-1.5 rounded-lg mt-2 font-bold">CHỌN</button></div>
+                    <div class="p-6 bg-emerald-50 rounded-2xl flex justify-between items-center border border-emerald-100">
+                        <div class="text-left">
+                            <h5 class="font-bold text-emerald-900 text-lg">Deluxe Ocean View</h5>
+                            <p class="text-xs text-slate-500 italic mt-1">${translations[currentLang]['msg_last_rooms']}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-green-primary text-xl">1.800.000đ</div>
+                            <button onclick="closeModal(); scrollToBooking('Deluxe Ocean View')" class="bg-green-primary text-white text-xs px-6 py-2 rounded-xl mt-3 font-bold shadow-md uppercase">${translations[currentLang]['btn_book']}</button>
+                        </div>
                     </div>
                 `;
                 document.getElementById('result-modal').style.display = 'flex';
             }, 1000);
         });
 
+        document.getElementById('final-booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('full-name').value;
+            document.getElementById('loading-overlay').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none';
+                document.getElementById('modal-title').innerText = translations[currentLang]['msg_success_title'];
+                document.getElementById('modal-content').innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="w-16 h-16 bg-green-100 text-green-primary rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-check text-3xl"></i></div>
+                        <p class="text-slate-600 mb-4 font-bold uppercase">Cảm ơn ${name}!</p>
+                        <p class="text-sm text-slate-500">${translations[currentLang]['msg_success_body']} (0933.484.668)</p>
+                        <button onclick="closeModal()" class="mt-8 bg-green-primary text-white px-10 py-3 rounded-xl font-bold shadow-lg uppercase tracking-widest">${translations[currentLang]['msg_understand']}</button>
+                    </div>
+                `;
+                document.getElementById('result-modal').style.display = 'flex';
+                document.getElementById('final-booking-form').reset();
+            }, 1500);
+        });
+
         function closeModal() { document.getElementById('result-modal').style.display = 'none'; }
+        window.onclick = function(e) { if (e.target == document.getElementById('result-modal')) closeModal(); }
+        
+        changeLanguage('vi');
     </script>
 </body>
 </html>
